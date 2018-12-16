@@ -1,4 +1,4 @@
-# Random Forest Classification
+# K Means
 
 # import libraries 
 
@@ -6,15 +6,37 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-Data = pd.read_csv('Social_Network_Ads.csv')
-X = Data.iloc[:,2:4].values
-Y = Data.iloc[:,4].values
+Data = pd.read_csv('Mall_Customers.csv')
+X = Data.iloc[:,[3,4]].values
 
+
+
+from sklearn.cluster import KMeans
+
+wcss = []
+for i in range(1,11):
+    kmeans = KMeans(n_clusters=i )
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+    
+plt.plot(range(1,11),wcss)
+plt.show()
+
+kmeans2 = KMeans(n_clusters=5)
+y_means = kmeans2.fit_predict(X)
+
+plt.scatter(X[y_means == 0 , 0],X[y_means == 0 , 1],c = 'red')
+plt.scatter(X[y_means == 1 , 0],X[y_means == 1 , 1],c = 'blue')
+plt.scatter(X[y_means == 2 , 0],X[y_means == 2 , 1],c = 'green')
+plt.scatter(X[y_means == 3 , 0],X[y_means == 3 , 1],c = 'gray')
+plt.scatter(X[y_means == 4 , 0],X[y_means == 4 , 1],c = 'black')
+plt.scatter(kmeans2.cluster_centers_[:,0],kmeans2.cluster_centers_[:,1],s=300,c='yellow')
+plt.show()
 # Split Data To Test and Train -- train_test_split
+'''
 from sklearn.model_selection import train_test_split
 
 X_train ,X_test , Y_train , Y_test = train_test_split(X,Y,train_size=.8 , test_size = .2 , random_state=0)
-
 
 from sklearn.preprocessing import StandardScaler
 sc_X = StandardScaler()
@@ -70,3 +92,4 @@ plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
 plt.show()
+'''
